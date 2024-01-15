@@ -89,6 +89,17 @@ namespace Lapis.Areas.Identity.Pages.Account
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
+                    //IF LOGGED IN USER IS NOT ADMIN , WILL BE S CUSTOMER
+                    if (User.IsInRole(GlobalConst.AdminRole))
+                    {
+                        await _userManager.AddToRoleAsync(user, GlobalConst.CustomerRole);
+                    }
+                    else
+                    {
+                        await _userManager.AddToRoleAsync(user, GlobalConst.CustomerRole);
+                    }
+                    
+
                     _logger.LogInformation("User created a new account with password.");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
