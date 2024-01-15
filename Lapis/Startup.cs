@@ -32,8 +32,11 @@ namespace Lapis
             options.UseSqlServer(
                 Configuration.GetConnectionString("DefaultConnection")));
 
-            //basic authentication, user registration, and login functionality.
-            services.AddDefaultIdentity<IdentityUser>()
+             /*[services.AddDefaultIdentity<IdentityUser>()]] basic authentication, user registration, and login functionality.
+             not contain configuring Roles*/
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddDefaultTokenProviders() //Provides Token when forgeting password.
+                .AddDefaultUI()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             //session configuration

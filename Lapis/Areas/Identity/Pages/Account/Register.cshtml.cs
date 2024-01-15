@@ -24,9 +24,10 @@ namespace Lapis.Areas.Identity.Pages.Account
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public RegisterModel(
-            UserManager<IdentityUser> userManager,
+            UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender)
@@ -35,6 +36,7 @@ namespace Lapis.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _roleManager = roleManager;
         }
 
         [BindProperty]
@@ -67,6 +69,11 @@ namespace Lapis.Areas.Identity.Pages.Account
 
         public async Task OnGetAsync(string returnUrl = null)
         {
+            if (!await _roleManager.RoleExistsAsync(GlobalConst.AdminRole))
+            {
+                await _roleManager.CreateAsync(new IdentityRole( GlobalConst.AdminRole));
+                await _roleManager.CreateAsync(new IdentityRole(GlobalConst.CustomerRole));
+            }
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
