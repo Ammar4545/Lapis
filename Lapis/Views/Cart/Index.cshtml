@@ -1,5 +1,7 @@
 ﻿@model List<Product>
-<form method="post">
+@if (Model.Count()>0)
+{
+    <form method="post">
     <br />
     <div class="backgroundWhiteBorder">
         <div class="container row">
@@ -45,7 +47,7 @@
                                 <span style="font-size:17px;">$@item.Price</span>/ sqft
                             </div>
                             <div class="col-2 col-lg-1 p-0 pt-lg-4 text-center">
-                                <a class="btn btn-outline-danger">
+                                <a asp-action="Remove" asp-route-id="@item.Id" class="btn btn-outline-danger">
                                     <i class="fas fa-trash"></i>
                                 </a>
                             </div>
@@ -67,4 +69,9 @@
             </div>
         </div>
     </div>
-</form>
+    </form>
+}
+else
+{
+    <p>There are no Items!! add Item </p>
+}
