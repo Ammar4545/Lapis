@@ -32,27 +32,9 @@ namespace Lapis.Controllers
             return View(productList);
         }
 
-        
-        public IActionResult Remove(int id)
-        {
-            List<ShoppingCart> shoppingCartProducts = new List<ShoppingCart>();
-
-            if (HttpContext.Session.Get<List<ShoppingCart>>(GlobalConst.CartKey) != null
-                && HttpContext.Session.Get<List<ShoppingCart>>(GlobalConst.CartKey).Count > 0)
-            {
-                shoppingCartProducts = HttpContext.Session.Get<List<ShoppingCart>>(GlobalConst.CartKey);
-            }
-
-            shoppingCartProducts.Remove(shoppingCartProducts.FirstOrDefault(a => a.ProductId==id));
-
-            HttpContext.Session.Set(GlobalConst.CartKey, shoppingCartProducts);
-
-            return RedirectToAction(nameof(Index));
-        }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [ActionName("Post")]
+        [ActionName("Index")]
         public IActionResult IndexPost()
         {
 
@@ -85,6 +67,38 @@ namespace Lapis.Controllers
                 ProductList = productList
             };
             return View(ProductUserVM);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ActionName("Summary")]
+        public IActionResult SummaryPost(ProductUserVM ProductUserVM)
+        { 
+            return RedirectToAction(nameof(InquiryConfirm));
+        }
+
+        public IActionResult InquiryConfirm()
+        {
+            HttpContext.Session.Clear();
+            return View();
+        }
+
+
+        public IActionResult Remove(int id)
+        {
+            List<ShoppingCart> shoppingCartProducts = new List<ShoppingCart>();
+
+            if (HttpContext.Session.Get<List<ShoppingCart>>(GlobalConst.CartKey) != null
+                && HttpContext.Session.Get<List<ShoppingCart>>(GlobalConst.CartKey).Count > 0)
+            {
+                shoppingCartProducts = HttpContext.Session.Get<List<ShoppingCart>>(GlobalConst.CartKey);
+            }
+
+            shoppingCartProducts.Remove(shoppingCartProducts.FirstOrDefault(a => a.ProductId == id));
+
+            HttpContext.Session.Set(GlobalConst.CartKey, shoppingCartProducts);
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }

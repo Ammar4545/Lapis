@@ -1,6 +1,7 @@
 ﻿using Mailjet.Client;
 using Mailjet.Client.Resources;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Threading.Tasks;
@@ -9,13 +10,20 @@ namespace Lapis.Config
 {
     public class EmailSender : IEmailSender
     {
+        public readonly IConfiguration _configuration;
+        public EmailSender(IConfiguration configuration )
+        {
+            _configuration = configuration;
+        }
+        public MailJet mailJet { get; set; }
         public Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
             return SendEmail(email , subject , htmlMessage);
         }
         public async Task SendEmail(string email, string subject, string htmlMessage)
-        { 
-            MailjetClient client = new MailjetClient("22f6cfded3d579f07fc092e822b36380", "0071437aa97edc757229cd64a8ef8418")
+        {
+            mailJet = _configuration.GetSection("MailJet").Get<MailJet>();
+            MailjetClient client = new MailjetClient(mailJet.ApiKey, mailJet.SecretKey)
             {
                 Version = ApiVersion.V3_1,
             };
@@ -28,7 +36,7 @@ namespace Lapis.Config
       {
        "From",
        new JObject {
-        {"Email", "ammar.m777.2@gmail.com"},
+        {"Email", "testlapies@proton.me"},
         {"Name", "ammar"}
        }
       }, {
