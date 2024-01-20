@@ -3,10 +3,15 @@ using Lapis.Data;
 using Lapis.Models;
 using Lapis.Models.ViewModel;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Lapis.Controllers
 {
@@ -14,10 +19,15 @@ namespace Lapis.Controllers
     public class CartController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IEmailSender _emailSender;
+
         public ProductUserVM ProductUserVM { get; set; }
-        public CartController(ApplicationDbContext context)
+        public CartController(ApplicationDbContext context,IWebHostEnvironment webHostEnvironment , IEmailSender emailSender)
         {
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
+            _emailSender = emailSender;
         }
         public IActionResult Index()
         {
@@ -72,13 +82,38 @@ namespace Lapis.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ActionName("Summary")]
-        public IActionResult SummaryPost(ProductUserVM ProductUserVM)
-        { 
+        public async Task<IActionResult> SummaryPost(ProductUserVM ProductUserVM)
+        {
+            var pathTemplate = _webHostEnvironment.WebRootPath + "/" + "temp" + "/" + "Inquiry.html";
+
+            var subject = "MAIL";
+            var htmlBody = "";
+            using (StreamReader reader = System.IO.File.OpenText(pathTemplate))
+            {
+                htmlBody = reader.ReadToEnd();
+            }
+
+            StringBuilder productListSB = new StringBuilder();
+            foreach (var prod in ProductUserVM.ProductList)
+            {
+                productListSB.Append($" - Name: { prod.Name} <span style='font-size:14px;'> (ID: {prod.Id})</span><br />");
+            }
+
+            string messageBody = string.Format(htmlBody,
+                ProductUserVM.applicationUser.FullName,
+                ProductUserVM.applicationUser.Email,
+                ProductUserVM.applicationUser.PhoneNumber,
+                productListSB.ToString());
+
+
+            await _emailSender.SendEmailAsync(GlobalConst.EmailAdmin, subject, messageBody);
+
             return RedirectToAction(nameof(InquiryConfirm));
         }
 
         public IActionResult InquiryConfirm()
         {
+
             HttpContext.Session.Clear();
             return View();
         }

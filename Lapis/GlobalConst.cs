@@ -7,6 +7,7 @@
 
         public static string AdminRole = @"Admin";
         public static string CustomerRole = @"Customer";
+        public static string EmailAdmin = @"ammar.m777.2@gmail.com";
 
     }
 }
