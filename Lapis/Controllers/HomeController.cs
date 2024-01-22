@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Lapis.Config;
+using Lapis_Utility;
 using System.Threading.Tasks;
 
 namespace Lapis.Controllers

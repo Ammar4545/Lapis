@@ -23,4 +23,8 @@
     <Folder Include="wwwroot\temp\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Lapies_Utility\Lapis_Utility.csproj" />
+  </ItemGroup>
+
 </Project>

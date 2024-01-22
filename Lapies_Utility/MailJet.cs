@@ -1,4 +1,4 @@
-﻿namespace Lapis.Config
+﻿namespace Lapis_Utility
 {
     public class MailJet 
     {

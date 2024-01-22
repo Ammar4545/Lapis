@@ -1,4 +1,4 @@
-﻿using Lapis.Config;
+﻿using Lapis_Utility;
 using Lapis.Data;
 using Lapis.Models;
 using Lapis.Models.ViewModel;

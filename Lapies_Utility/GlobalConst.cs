@@ -1,4 +1,4 @@
-﻿namespace Lapis
+﻿namespace Lapis_Utility
 {
     public static class GlobalConst
     {

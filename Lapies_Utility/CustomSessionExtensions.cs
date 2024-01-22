@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.Text.Json;
 
-namespace Lapis.Config
+namespace Lapis_Utility
 {
     public static class CustomSessionExtensions
     {

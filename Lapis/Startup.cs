@@ -1,4 +1,4 @@
-using Lapis.Config;
+using Lapis_Utility;
 using Lapis.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
