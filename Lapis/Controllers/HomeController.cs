@@ -1,6 +1,6 @@
 ﻿using Lapis.Data;
-using Lapis.Models;
-using Lapis.Models.ViewModel;
+using Lapis_Models;
+using Lapis_Models.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;

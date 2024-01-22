@@ -20,7 +20,7 @@ namespace Lapis.Migrations
                 .HasAnnotation("ProductVersion", "5.0.17")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Lapis.Models.ApplicationType", b =>
+            modelBuilder.Entity("Lapis_Models.ApplicationType", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -36,7 +36,7 @@ namespace Lapis.Migrations
                     b.ToTable("ApplicationTypes");
                 });
 
-            modelBuilder.Entity("Lapis.Models.Category", b =>
+            modelBuilder.Entity("Lapis_Models.Category", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -55,7 +55,7 @@ namespace Lapis.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("Lapis.Models.Product", b =>
+            modelBuilder.Entity("Lapis_Models.Product", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -85,9 +85,9 @@ namespace Lapis.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("Lapis.Models.Product", b =>
+            modelBuilder.Entity("Lapis_Models.Product", b =>
                 {
-                    b.HasOne("Lapis.Models.Category", "Category")
+                    b.HasOne("Lapis_Models.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)

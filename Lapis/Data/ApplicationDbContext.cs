@@ -1,4 +1,4 @@
-﻿using Lapis.Models;
+﻿using Lapis_Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 

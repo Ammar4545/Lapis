@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace Lapis.Models
+namespace Lapis_Models
 {
     public class ApplicationUser : IdentityUser
     {

@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 
-namespace Lapis.Models.ViewModel
+namespace Lapis_Models.ViewModel
 {
     public class HomeVM
     {

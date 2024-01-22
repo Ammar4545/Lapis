@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 
-namespace Lapis.Models.ViewModel
+namespace Lapis_Models.ViewModel
 {
     public class ProductVM
     {

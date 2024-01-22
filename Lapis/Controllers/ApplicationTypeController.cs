@@ -1,5 +1,5 @@
 ﻿using Lapis.Data;
-using Lapis.Models;
+using Lapis_Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;

@@ -1,6 +1,6 @@
 ﻿using Lapis.Data;
-using Lapis.Models;
-using Lapis.Models.ViewModel;
+using Lapis_Models;
+using Lapis_Models.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;

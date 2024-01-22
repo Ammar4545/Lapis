@@ -1,4 +1,4 @@
-﻿namespace Lapis.Models.ViewModel
+﻿namespace Lapis_Models.ViewModel
 {
     public class DetailsVM
     {
