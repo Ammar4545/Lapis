@@ -2,12 +2,12 @@
 {
     public static class GlobalConst
     {
-        public static string ImagePath = @"\images\product\";
-        public static string CartKey = @"\images\product\";
+        public const string ImagePath = @"\images\product\";
+        public const string CartKey = @"\images\product\";
 
-        public static string AdminRole = @"Admin";
-        public static string CustomerRole = @"Customer";
-        public static string EmailAdmin = @"ammar.m777.2@gmail.com";
+        public const string AdminRole = @"Admin";
+        public const string CustomerRole = @"Customer";
+        public const string EmailAdmin = @"ammar.m777.2@gmail.com";
 
     }
 }

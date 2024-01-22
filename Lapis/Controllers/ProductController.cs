@@ -1,6 +1,7 @@
 ﻿using Lapis.Data;
 using Lapis.Models;
 using Lapis.Models.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -13,6 +14,7 @@ using System.Linq;
 
 namespace Lapis.Controllers
 {
+    [Authorize(Roles = GlobalConst.AdminRole)]
     public class ProductController : Controller
     {
         private readonly ApplicationDbContext _context;

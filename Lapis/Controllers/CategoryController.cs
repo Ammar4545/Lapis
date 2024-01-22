@@ -1,11 +1,13 @@
 ﻿using Lapis.Data;
 using Lapis.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections;
 using System.Collections.Generic;
 
 namespace Lapis.Controllers
 {
+    [Authorize(Roles = GlobalConst.AdminRole)]
     public class CategoryController : Controller
     {
         private readonly ApplicationDbContext _context;

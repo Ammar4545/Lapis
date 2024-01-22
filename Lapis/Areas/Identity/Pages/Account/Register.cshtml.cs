@@ -119,7 +119,14 @@ namespace Lapis.Areas.Identity.Pages.Account
                     }
                     else
                     {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
+                        if (!User.IsInRole(GlobalConst.AdminRole))
+                        {
+                            await _signInManager.SignInAsync(user, isPersistent: false);
+                        }
+                        else
+                        {
+                            RedirectToAction("Index");
+                        }
                         return LocalRedirect(returnUrl);
                     }
                 }
