@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Lapis.Migrations
+namespace Lapis_DataAcess.Migrations
 {
     public partial class addProductTBL : Migration
     {

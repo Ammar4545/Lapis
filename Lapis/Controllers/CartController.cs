@@ -1,5 +1,4 @@
 ﻿using Lapis_Utility;
-using Lapis.Data;
 using Lapis_Models;
 using Lapis_Models.ViewModel;
 using Microsoft.AspNetCore.Authorization;
@@ -12,6 +11,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Lapis_DataAcess;
 
 namespace Lapis.Controllers
 {

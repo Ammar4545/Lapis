@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Lapis.Migrations
+namespace Lapis_DataAcess.Migrations
 {
     public partial class scaffoldIdentity : Migration
     {
