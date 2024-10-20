@@ -29,14 +29,59 @@ namespace Lapis_DataAcess.Repository
             return dbset.Find(id);
         }
 
-        public IEnumerable<T> FirstOrDefault(Expression<Func<T, bool>> filter = null, string includeProperties = null, bool isTracking = true)
+        public T FirstOrDefault(Expression<Func<T, bool>> filter = null, string includeProperties = null, bool isTracking = true)
         {
-            throw new NotImplementedException();
+            IQueryable<T> query = dbset;
+
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            if (includeProperties is not null)
+            {
+                foreach (var includeProperty in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProperty);
+                }
+            }
+
+            if (!isTracking)
+            {
+                query = query.AsNoTracking();
+            }
+
+            return query.FirstOrDefault();
         }
 
         public IEnumerable<T> GetAll(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, string includeProperties = null, bool isTracking = true)
         {
-            throw new NotImplementedException();
+            IQueryable<T> query = dbset;
+
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            if (includeProperties is not null)
+            {
+                foreach (var includeProperty in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProperty);
+                }
+            }
+
+            if (orderBy is not null)
+            {
+                query = orderBy(query);
+            }
+
+            if (!isTracking)
+            {
+                query = query.AsNoTracking();
+            }
+
+            return query.ToList();
         }
 
         public void Remove(T entity)
