@@ -11,7 +11,7 @@ namespace Lapis_DataAcess.Repository.IRepository
     {
         T Find(int id);
         IEnumerable<T> GetAll(Expression<Func<T,bool>> filter = null, Func<IQueryable<T>,IOrderedQueryable<T>> orderBy =null, string includeProperties= null, bool isTracking = true);
-        IEnumerable<T> FirstOrDefault(Expression<Func<T,bool>> filter = null, string includeProperties= null, bool isTracking = true);
+        T FirstOrDefault(Expression<Func<T,bool>> filter = null, string includeProperties= null, bool isTracking = true);
         void Add(T entity);
         void Remove(T entity);
         void Save();

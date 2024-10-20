@@ -86,12 +86,12 @@ namespace Lapis_DataAcess.Repository
 
         public void Remove(T entity)
         {
-            throw new NotImplementedException();
+            dbset.Remove(entity);
         }
 
         public void Save()
         {
-            throw new NotImplementedException();
+            _db.SaveChanges();
         }
     }
 }
