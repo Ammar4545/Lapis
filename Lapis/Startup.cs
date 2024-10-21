@@ -44,6 +44,7 @@ namespace Lapis
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddTransient<IEmailSender, EmailSender>();
+            services.AddScoped<IApplicationTypeRepository, ApplicationTypeRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
 
             //session configuration
