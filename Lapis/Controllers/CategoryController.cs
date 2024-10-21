@@ -6,21 +6,22 @@ using System.Collections;
 using System.Collections.Generic;
 using Lapis_Utility;
 using Lapis_DataAcess;
+using Lapis_DataAcess.Repository.IRepository;
 
 namespace Lapis.Controllers
 {
     [Authorize(Roles = GlobalConst.AdminRole)]
     public class CategoryController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ICategoryRepository _categoryReposiroty;
 
-        public CategoryController(ApplicationDbContext context)
+        public CategoryController(ICategoryRepository categoryReposiroty)
         {
-            _context = context;
+            _categoryReposiroty = categoryReposiroty;
         }
         public IActionResult Index()
         {
-            IEnumerable<Category> result = _context.Categories;
+            IEnumerable<Category> result = _categoryReposiroty.GetAll();
 
             return View(result);
         }
@@ -37,8 +38,8 @@ namespace Lapis.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Categories.Add(category);
-                _context.SaveChanges();
+                _categoryReposiroty.Add(category);
+                _categoryReposiroty.Save();
                 return RedirectToAction("Index");
             }
             else
@@ -55,7 +56,7 @@ namespace Lapis.Controllers
                 return NotFound();
             }
 
-            var result = _context.Categories.Find(id);
+            var result = _categoryReposiroty.Find(id);
 
             if (result is null)
             {
@@ -71,8 +72,8 @@ namespace Lapis.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Categories.Update(category);
-                _context.SaveChanges();
+                _categoryReposiroty.Update(category);
+                _categoryReposiroty.Save();
                 return RedirectToAction("Index");
             }
             else
@@ -89,7 +90,7 @@ namespace Lapis.Controllers
                 return NotFound();
             }
 
-            var result = _context.Categories.Find(id);
+            var result = _categoryReposiroty.Find(id);
 
             if (result is null)
             {
@@ -101,13 +102,13 @@ namespace Lapis.Controllers
 
         public IActionResult DeletePost(int? id)
         {
-            var category = _context.Categories.Find(id);
+            var category = _categoryReposiroty.Find(id);
 
             if (category == null)
             { return NotFound(); }
-            
-            _context.Categories.Remove(category);
-            _context.SaveChanges();
+
+            _categoryReposiroty.Remove(category);
+            _categoryReposiroty.Save();
             return RedirectToAction("Index");
         }
 

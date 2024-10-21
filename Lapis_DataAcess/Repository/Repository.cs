@@ -24,7 +24,7 @@ namespace Lapis_DataAcess.Repository
             dbset.Add(entity);
         }
 
-        public T Find(int id)
+        public T Find(int? id)
         {
             return dbset.Find(id);
         }

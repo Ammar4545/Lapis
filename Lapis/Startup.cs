@@ -1,4 +1,6 @@
 using Lapis_DataAcess;
+using Lapis_DataAcess.Repository;
+using Lapis_DataAcess.Repository.IRepository;
 using Lapis_Utility;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -42,6 +44,7 @@ namespace Lapis
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddTransient<IEmailSender, EmailSender>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
 
             //session configuration
             services.AddHttpContextAccessor();
