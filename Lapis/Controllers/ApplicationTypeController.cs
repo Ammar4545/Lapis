@@ -5,21 +5,24 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using Lapis_Utility;
 using Lapis_DataAcess;
+using Lapis_DataAcess.Repository;
+using Lapis_DataAcess.Repository.IRepository;
+using Microsoft.EntityFrameworkCore;
 
 namespace Lapis.Controllers
 {
     [Authorize(Roles =GlobalConst.AdminRole)]
     public class ApplicationTypeController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IApplicationTypeRepository _appTypeRepo;
 
-        public ApplicationTypeController(ApplicationDbContext context)
+        public ApplicationTypeController(IApplicationTypeRepository appTypeRepo)
         {
-            _context = context;
+            _appTypeRepo = appTypeRepo;
         }
         public IActionResult Index()
         {
-            IEnumerable<ApplicationType> result = _context.ApplicationTypes;
+            IEnumerable<ApplicationType> result = _appTypeRepo.GetAll();
 
             return View(result);
         }
@@ -33,8 +36,8 @@ namespace Lapis.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(ApplicationType applicationType)
         {
-            _context.ApplicationTypes.Add(applicationType);
-            _context.SaveChanges();
+            _appTypeRepo.Add(applicationType);
+            _appTypeRepo.Save();
             return RedirectToAction("Index");
         }
 
@@ -46,7 +49,7 @@ namespace Lapis.Controllers
                 return NotFound();
             }
 
-            var result = _context.ApplicationTypes.Find(id);
+            var result = _appTypeRepo.Find(id);
 
             if (result is null)
             {
@@ -62,8 +65,8 @@ namespace Lapis.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.ApplicationTypes.Update(applicationType);
-                _context.SaveChanges();
+                _appTypeRepo.Update(applicationType);
+                _appTypeRepo.Save();
                 return RedirectToAction("Index");
             }
             else
@@ -80,7 +83,7 @@ namespace Lapis.Controllers
                 return NotFound();
             }
 
-            var result = _context.ApplicationTypes.Find(id);
+            var result = _appTypeRepo.Find(id);
 
             if (result is null)
             {
@@ -92,13 +95,13 @@ namespace Lapis.Controllers
 
         public IActionResult DeletePost(int? id)
         {
-            var category = _context.ApplicationTypes.Find(id);
+            var category = _appTypeRepo.Find(id);
 
             if (category == null)
             { return NotFound(); }
 
-            _context.ApplicationTypes.Remove(category);
-            _context.SaveChanges();
+            _appTypeRepo.Remove(category);
+            _appTypeRepo.Save();
             return RedirectToAction("Index");
         }
     }
