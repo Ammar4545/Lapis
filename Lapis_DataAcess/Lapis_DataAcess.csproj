@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Lapies_Utility\Lapis_Utility.csproj" />
     <ProjectReference Include="..\Lapis_Models\Lapis_Models.csproj" />
   </ItemGroup>
 
