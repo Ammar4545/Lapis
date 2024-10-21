@@ -13,30 +13,29 @@ using System.IO;
 using System.Linq;
 using Lapis_Utility;
 using Lapis_DataAcess;
+using Lapis_DataAcess.Repository.IRepository;
 
 namespace Lapis.Controllers
 {
     [Authorize(Roles = GlobalConst.AdminRole)]
     public class ProductController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IProductRepository _productRepo;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public ProductController(ApplicationDbContext context , IWebHostEnvironment webHostEnvironment)
+        public ProductController(IProductRepository productRepo  , IWebHostEnvironment webHostEnvironment)
         {
-            _context = context;
+            _productRepo = productRepo;
             _webHostEnvironment = webHostEnvironment;
         }
         public  IActionResult Index()
         {
-            IEnumerable<Product> result = _context.Products;
-            foreach (var item in result)
-            {
-                item.Category = _context.Categories.FirstOrDefault(x => x.Id == item.CategoryId);
-                item.ApplicationType = _context.ApplicationTypes.FirstOrDefault(x => x.Id == item.ApplicationTypeId);
-            }
-
-
+            IEnumerable<Product> result = _productRepo.GetAll(includeProperties:"Category,ApplicationType");
+            //foreach (var item in result)
+            //{
+            //    item.Category = _productRepo.FirstOrDefault(x => x.Id == item.CategoryId);
+            //    item.ApplicationType = _context.ApplicationTypes.FirstOrDefault(x => x.Id == item.ApplicationTypeId);
+            //}
             return View(result);
         }
        // get categories for u then u can add
@@ -46,20 +45,9 @@ namespace Lapis.Controllers
             ProductVM productVM = new ProductVM
             {
                 Product = new Product(),
-                SelectCategories = _context.Categories.Select(x =>
-                new SelectListItem
-                {
-                    Text = x.Name,
-                    Value = x.Id.ToString()
-                }),
-                SelectedApplicationType = _context.ApplicationTypes.Select(x =>
-                new SelectListItem
-                {
-                    Text = x.Name,
-                    Value = x.Id.ToString()
-                })
+                SelectedCategories = _productRepo.GetAllDropDown(GlobalConst.Category),
+                SelectedApplicationType = _productRepo.GetAllDropDown(GlobalConst.ApplicationType)
             };
-
             if (id == null)
             {
                 //Creating product it will take u to empty form 
@@ -68,7 +56,7 @@ namespace Lapis.Controllers
             else
             {
                 // we will retrive old context for updateting
-                productVM.Product = _context.Products.Find(id);
+                productVM.Product = _productRepo.Find(id.GetValueOrDefault());
                 if (productVM.Product is null)
                 {
                     return NotFound();
@@ -99,11 +87,11 @@ namespace Lapis.Controllers
 
                     productVM.Product.Image = filename + extention;
 
-                    _context.Products.Add(productVM.Product);
+                    _productRepo.Add(productVM.Product);
                 }
                 else
                 {
-                    var productObjDb = _context.Products.AsNoTracking().FirstOrDefault(x => x.Id == productVM.Product.Id);
+                    var productObjDb = _productRepo.FirstOrDefault(x=>x.Id==productVM.Product.Id,isTracking:false);
 
                     if (file.Count > 0)
                     {
@@ -128,28 +116,16 @@ namespace Lapis.Controllers
                     {
                         productVM.Product.Image = productObjDb.Image;
                     }
-                    _context.Products.Update(productVM.Product);
+                    _productRepo.Update(productVM.Product);
                 }
-                _context.SaveChanges();
+                _productRepo.Save();
                 return RedirectToAction("Index");
             }
             //see if the request is not valid we will go to the view but the dropdwon list will be empty
             //so u should populate it again 
 
-
-            productVM.SelectCategories = _context.Categories.Select(x =>
-                new SelectListItem
-                {
-                    Text = x.Name,
-                    Value = x.Id.ToString()
-                }); 
-            productVM.SelectedApplicationType = _context.ApplicationTypes.Select(x =>
-                new SelectListItem
-                {
-                    Text = x.Name,
-                    Value = x.Id.ToString()
-                });
-           
+            productVM.SelectedCategories = _productRepo.GetAllDropDown(GlobalConst.Category);
+            productVM.SelectedApplicationType = _productRepo.GetAllDropDown(GlobalConst.ApplicationType);
 
             return View(productVM);
         }
@@ -163,8 +139,8 @@ namespace Lapis.Controllers
             }
 
             //including category tbl
-            
-            var result = _context.Products.Include(x => x.Category).Include(c=>c.ApplicationType).FirstOrDefault(a => a.Id == id);
+
+            var result = _productRepo.FirstOrDefault(x => x.Id == id, includeProperties: "Category,ApplicationType");
             if (result is null)
             {
                 return NotFound();
@@ -176,7 +152,7 @@ namespace Lapis.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeletePost(int? id)
         {
-            var productDb = _context.Products.Find(id);
+            var productDb = _productRepo.Find(id.GetValueOrDefault());
 
             if (productDb == null)
             { return NotFound(); }
@@ -191,8 +167,8 @@ namespace Lapis.Controllers
             }
 
 
-            _context.Products.Remove(productDb);
-            _context.SaveChanges();
+            _productRepo.Remove(productDb);
+            _productRepo.Save ();
             return RedirectToAction("Index");
         }
 
