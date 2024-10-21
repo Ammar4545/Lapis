@@ -46,6 +46,7 @@ namespace Lapis
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddScoped<IApplicationTypeRepository, ApplicationTypeRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
 
             //session configuration
             services.AddHttpContextAccessor();
