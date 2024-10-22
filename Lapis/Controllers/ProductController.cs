@@ -30,7 +30,7 @@ namespace Lapis.Controllers
         }
         public  IActionResult Index()
         {
-            IEnumerable<Product> result = _productRepo.GetAll(includeProperties:"Category,ApplicationType");
+            IEnumerable<Product> result = _productRepo.GetAll(includeProperties: "Category,ApplicationType");
             //foreach (var item in result)
             //{
             //    item.Category = _productRepo.FirstOrDefault(x => x.Id == item.CategoryId);

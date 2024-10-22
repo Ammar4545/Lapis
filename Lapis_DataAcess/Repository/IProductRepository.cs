@@ -21,23 +21,26 @@ namespace Lapis_DataAcess.Repository
 
         public IEnumerable<SelectListItem> GetAllDropDown(string obj)
         {
+            
             if (obj== GlobalConst.ApplicationType)
             {
-                _db.ApplicationTypes.
+                var dropDwonList = _db.ApplicationTypes.
                 Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
                 });
+                return dropDwonList;
             }
             if (obj == GlobalConst.Category)
             {
-                _db.Categories.
+                var dropDwonList = _db.Categories.
                 Select(x => new SelectListItem
                 {
                     Text = x.Name,
                     Value = x.Id.ToString()
                 });
+                return dropDwonList;
             }
             return null;
         }
