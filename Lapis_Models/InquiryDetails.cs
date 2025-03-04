@@ -16,7 +16,7 @@ namespace Lapis_Models
         [Required]
         public int InquiryHeaderId { get; set; }
         [ForeignKey("InquiryHeaderId")]
-        public InquiryHeader InquiryHeader { get; set; }
+        public InquiryHeaders InquiryHeader { get; set; }
 
         [Required]
         public int ProductId { get; set; }

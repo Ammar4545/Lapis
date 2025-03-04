@@ -14,5 +14,7 @@ namespace Lapis_DataAcess
         public DbSet<ApplicationType> ApplicationTypes { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<InquiryDetails> InquiryDetail { get; set; }
+        public DbSet<InquiryHeaders> InquiryHeader { get; set; }
     }
 }

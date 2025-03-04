@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Lapis_Models
 {
-    public class InquiryHeader
+    public class InquiryHeaders
     {
         [Key]
         public int Id { get; set; }
