@@ -11,6 +11,7 @@ using System.Linq;
 using Lapis_Utility;
 using System.Threading.Tasks;
 using Lapis_DataAcess;
+using Lapis_DataAcess.Repository.IRepository;
 
 namespace Lapis.Controllers
 {
@@ -18,19 +19,24 @@ namespace Lapis.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ApplicationDbContext _context;
+        private readonly IProductRepository _productRepo;
+        private readonly ICategoryRepository _categoryRepo;
 
-        public HomeController(ILogger<HomeController> logger , ApplicationDbContext context)
+
+        public HomeController(ILogger<HomeController> logger , ApplicationDbContext context, IProductRepository productRepo, ICategoryRepository categoryRepo)
         {
             _logger = logger;
             _context = context;
+            _productRepo = productRepo;
+            _categoryRepo = categoryRepo;
         }
 
         public IActionResult Index()
         {
             HomeVM home = new HomeVM()
             {
-                Products = _context.Products.Include(a => a.Category).Include(a => a.ApplicationType),
-                categories = _context.Categories
+                Products = _productRepo.GetAll(includeProperties: "Category,ApplicationType"),
+                categories = _categoryRepo.GetAll()
             };
             return View(home);
         }
@@ -48,8 +54,7 @@ namespace Lapis.Controllers
 
             DetailsVM detailsVM = new DetailsVM()
             {
-                product = _context.Products.Include(a => a.Category).Include(a => a.ApplicationType)
-               .Where(z => z.Id == id).FirstOrDefault(),
+                product = _productRepo.FirstOrDefault(x=>x.Id == id , includeProperties: "Category,ApplicationType"),
                 IsExistsInCart = false
             };
 
