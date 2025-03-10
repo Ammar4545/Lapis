@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace Lapis_DataAcess.Repository.IRepository
 {
-    public interface IApplicationUserRepository : IRepository<ApplicationUser>
+    public interface IApplicationTypeRepository: IRepository<ApplicationType>
     {
-        
+        void Update(ApplicationType applicationType);
     }
 }
