@@ -12,6 +12,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Lapis_DataAcess;
+using Lapis_DataAcess.Repository.IRepository;
 
 namespace Lapis.Controllers
 {
@@ -21,13 +22,24 @@ namespace Lapis.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IEmailSender _emailSender;
+        private readonly IProductRepository _productRepo;
+        private readonly IApplicationUserRepository _userRepo;
+        private readonly IInquiryDetailRepository _inquiryDetailRepo;
+        private readonly IInquiryHeaderRepository _inquiryHeaderRepo;
 
         public ProductUserVM ProductUserVM { get; set; }
-        public CartController(ApplicationDbContext context,IWebHostEnvironment webHostEnvironment , IEmailSender emailSender)
+        public CartController(ApplicationDbContext context,
+            IWebHostEnvironment webHostEnvironment, IEmailSender emailSender,
+            IProductRepository productRepo, IApplicationUserRepository userRepo,
+            IInquiryDetailRepository inquiryDetailRepo, IInquiryHeaderRepository inquiryHeaderRepo) 
         {
             _context = context;
             _webHostEnvironment = webHostEnvironment;
             _emailSender = emailSender;
+            _productRepo = productRepo;
+            _userRepo = userRepo;
+            _inquiryDetailRepo = inquiryDetailRepo;
+            _inquiryHeaderRepo = inquiryHeaderRepo;
         }
         public IActionResult Index()
         {
@@ -38,7 +50,7 @@ namespace Lapis.Controllers
                 shoppingCartProducts = HttpContext.Session.Get<List<ShoppingCart>>(GlobalConst.CartKey);
             }
             List<int> shoppingCartProducstsIds = shoppingCartProducts.Select(a => a.ProductId).ToList();
-            List<Product> productList = _context.Products.Where(a => shoppingCartProducstsIds.Contains(a.Id)).ToList();
+            List<Product> productList = _productRepo.GetAll(a => shoppingCartProducstsIds.Contains(a.Id)).ToList();
             return View(productList);
         }
 
@@ -69,11 +81,11 @@ namespace Lapis.Controllers
                 shoppingCartProducts = HttpContext.Session.Get<List<ShoppingCart>>(GlobalConst.CartKey);
             }
             List<int> shoppingCartProducstsIds = shoppingCartProducts.Select(a => a.ProductId).ToList();
-            List<Product> productList = _context.Products.Where(a => shoppingCartProducstsIds.Contains(a.Id)).ToList();
+            List<Product> productList = _productRepo.GetAll(a => shoppingCartProducstsIds.Contains(a.Id)).ToList();
 
             ProductUserVM = new ProductUserVM()
             {
-                applicationUser = _context.ApplicationUsers.FirstOrDefault(a => a.Id == claim.Value),
+                applicationUser = _userRepo.FirstOrDefault(a => a.Id == claim.Value),
                 ProductList = productList
             };
             return View(ProductUserVM);
@@ -107,6 +119,8 @@ namespace Lapis.Controllers
 
 
             await _emailSender.SendEmailAsync(GlobalConst.EmailAdmin, subject, messageBody);
+
+
 
             return RedirectToAction(nameof(InquiryConfirm));
         }
