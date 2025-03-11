@@ -13,6 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Lapis_DataAcess;
 using Lapis_DataAcess.Repository.IRepository;
+using System;
 
 namespace Lapis.Controllers
 {
@@ -96,6 +97,9 @@ namespace Lapis.Controllers
         [ActionName("Summary")]
         public async Task<IActionResult> SummaryPost(ProductUserVM ProductUserVM)
         {
+            var claimIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
             var pathTemplate = _webHostEnvironment.WebRootPath + "/" + "temp" + "/" + "Inquiry.html";
 
             var subject = "MAIL";
@@ -106,9 +110,9 @@ namespace Lapis.Controllers
             }
 
             StringBuilder productListSB = new StringBuilder();
-            foreach (var prod in ProductUserVM.ProductList)
+            foreach (var product in ProductUserVM.ProductList)
             {
-                productListSB.Append($" - Name: { prod.Name} <span style='font-size:14px;'> (ID: {prod.Id})</span><br />");
+                productListSB.Append($" - Name: { product.Name} <span style='font-size:14px;'> (ID: {product.Id})</span><br />");
             }
 
             string messageBody = string.Format(htmlBody,
@@ -119,8 +123,33 @@ namespace Lapis.Controllers
 
 
             await _emailSender.SendEmailAsync(GlobalConst.EmailAdmin, subject, messageBody);
+            InquiryHeaders inquiryHeaders = new InquiryHeaders()
+            {
+                
+                ApplicationUser = ProductUserVM.applicationUser,
+                ApplicationUserId = claim.Value,
+                FullName = ProductUserVM.applicationUser.FullName,
+                Email = ProductUserVM.applicationUser.Email,
+                PhoneNumber = ProductUserVM.applicationUser.PhoneNumber,
+                InquiryDate = DateTime.Now,
+
+            };
+            _inquiryHeaderRepo.Add(inquiryHeaders);
+            _inquiryHeaderRepo.Save();
+
+            foreach (var product in ProductUserVM.ProductList)
+            {
+                InquiryDetails inquiryDetails = new InquiryDetails()
+                {
+                    InquiryHeaderId= inquiryHeaders.Id,
+                    ProductId= product.Id,
 
 
+                };
+                _inquiryDetailRepo.Add(inquiryDetails);
+            }
+
+            _inquiryDetailRepo.Save();  
 
             return RedirectToAction(nameof(InquiryConfirm));
         }
