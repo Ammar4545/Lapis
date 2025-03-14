@@ -22,5 +22,14 @@ namespace Lapis.Controllers
         {
             return View();
         }
+
+
+
+
+        [HttpGet]
+        public IActionResult GetInquiryList()
+        {
+            return Json(new { data = _inquiryHeaderRepo.GetAll() });
+        }
     }
 }
